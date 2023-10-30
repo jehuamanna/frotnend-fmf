@@ -1,0 +1,67 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Root Config</title><script src="https://cdn.jsdelivr.net/npm/regenerator-runtime@0.13.7/runtime.min.js"></script><meta name="importmap-type" content="systemjs-importmap"/><script type="systemjs-importmap">{
+      "imports": {
+        "single-spa": "https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js",
+        "@icici/root-config": "https://cdn.jsdelivr.net/gh/jehuamanna/icici-root-config.js",
+        "@icici/nliff": "https://cdn.jsdelivr.net/gh/jehuamanna/bank-cdn/nli/init.js",
+        "@icici/flutter": "https://cdn.jsdelivr.net/gh/jehuamanna/bank-cdn/nli/flutter.js",
+        "@icici/Smart-Statement-oneview": "https://cdn.jsdelivr.net/gh/jehuamanna/bank-cdn/smart/init.js"
+      }
+    }</script><link rel="preload" href="https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js" as="script"><script src="https://cdn.jsdelivr.net/npm/import-map-overrides@2.2.0/dist/import-map-overrides.js"></script><script src="https://cdn.jsdelivr.net/npm/systemjs@6.8.3/dist/system.min.js"></script><script src="https://cdn.jsdelivr.net/npm/systemjs@6.8.3/dist/extras/amd.min.js"></script></head><body><noscript>You need to enable JavaScript to run this app.</noscript><script>window['appnames'] = {
+        "@icici/nliff": "https://cdn.jsdelivr.net/gh/jehuamanna/bank-cdn/nli/",
+        "@icici/Smart-Statement-oneview": "https://cdn.jsdelivr.net/gh/jehuamanna/bank-cdn/smart/"
+      }
+
+
+      function _load({ entrypointUrl, hostElement, renderer, assetBase }) {
+        try {
+
+          _flutter.loader.loadEntrypoint({
+            entrypointUrl: entrypointUrl + "main.dart.js",
+            onEntrypointLoaded: async function (engineInitializer) {
+              let appRunner = await engineInitializer.initializeEngine({
+                hostElement,
+                renderer,// "html" | "canvaskit",
+                assetBase,
+              });
+              await appRunner.runApp();
+            },
+          });
+        } catch (e) {
+          console.log(e)
+        }
+      }
+      const app = ({ entrypointUrl, hostElement, renderer, assetBase }) => () => ({
+        bootstrap: async function () {
+          console.log("App is bootstrapping", entrypointUrl, hostElement, renderer, assetBase)
+        },
+        mount: async function () {
+          console.log("App is loading")
+
+          _load({ entrypointUrl, hostElement, renderer, assetBase })
+
+        },
+        unmount: async function () {
+          console.log("App is unmouting")
+          const x = hostElement ? hostElement : document.querySelector("flt-glass-pane")
+          x.remove()
+        }
+      })
+
+      window.app = app;
+    System.import('@icici/root-config');
+    System.import('@icici/nliff');
+    System.import("@icici/flutter");  
+    System.import('@icici/Smart-Statement-oneview');
+    window.addEventListener('single-spa:before-first-mount', () => {
+        console.log(
+          'singl e-spa is about to mount the very first application for the first time',
+        );
+        const x = location.pathname
+      console.log(location.pathname, location.href.split("//"))
+      const basepath = x.split("/")[1] || ""
+      console.log(basepath, location.href);
+      document.head.innerHTML = document.head.innerHTML + "<base href='" + "/frotnend-fmf/" + basepath  + "/" +"' />";
+       
+
+
+      });</script><import-map-overrides-full show-when-local-storage="devtools" dev-libs></import-map-overrides-full></body></html>

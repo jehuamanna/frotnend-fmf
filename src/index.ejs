@@ -34,7 +34,11 @@
   <script type="systemjs-importmap">
     {
       "imports": {
-        "single-spa": "https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js"
+        "single-spa": "https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js",
+        "@icici/root-config": "https://cdn.jsdelivr.net/gh/jehuamanna/icici-root-config.js",
+        "@icici/nliff": "https://cdn.jsdelivr.net/gh/jehuamanna/bank-cdn/nli/init.js",
+        "@icici/flutter": "https://cdn.jsdelivr.net/gh/jehuamanna/bank-cdn/nli/flutter.js",
+        "@icici/Smart-Statement-oneview": "https://cdn.jsdelivr.net/gh/jehuamanna/bank-cdn/smart/init.js"
       }
     }
   </script>
@@ -133,7 +137,7 @@
       console.log(location.pathname, location.href.split("//"))
       const basepath = x.split("/")[1] || ""
       console.log(basepath, location.href);
-      document.head.innerHTML = document.head.innerHTML + "<base href='" + "/" + basepath  + "/" +"' />";
+      document.head.innerHTML = document.head.innerHTML + "<base href='" + "/frotnend-fmf/" + basepath  + "/" +"' />";
        
 
 
