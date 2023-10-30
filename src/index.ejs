@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Root Config</title>
+
+  <!--
+    Remove this if you only support browsers that support async/await.
+    This is needed by babel to share largeish helper code for compiling async/await in older
+    browsers. More information at https://github.com/single-spa/create-single-spa/issues/112
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/regenerator-runtime@0.13.7/runtime.min.js"></script>
+
+  <!--
+    This CSP allows any SSL-enabled host and for arbitrary eval(), but you should limit these directives further to increase your app's security.
+    Learn more about CSP policies at https://content-security-policy.com/#directive
+  -->
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: localhost:*; script-src 'unsafe-inline' 'unsafe-eval' https: localhost:*; connect-src https: localhost:* ws://localhost:*; style-src 'unsafe-inline' https:; object-src 'none';"> -->
+  <meta name="importmap-type" content="systemjs-importmap" />
+  <!-- If you wish to turn off import-map-overrides for specific environments (prod), uncomment the line below -->
+  <!-- More info at https://github.com/joeldenning/import-map-overrides/blob/master/docs/configuration.md#domain-list -->
+  <!-- <meta name="import-map-overrides-domains" content="denylist:prod.example.com" /> -->
+
+  <!-- Shared dependencies go into this import map. Your shared dependencies must be of one of the following formats:
+
+    1. System.register (preferred when possible) - https://github.com/systemjs/systemjs/blob/master/docs/system-register.md
+    2. UMD - https://github.com/umdjs/umd
+    3. Global variable
+
+    More information about shared dependencies can be found at https://single-spa.js.org/docs/recommended-setup#sharing-with-import-maps.
+  -->
+  <script type="systemjs-importmap">
+    {
+      "imports": {
+        "single-spa": "https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js"
+      }
+    }
+  </script>
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js" as="script">
+
+  <!-- Add your organization's prod import map URL to this script's src  -->
+  <!-- <script type="systemjs-importmap" src="/importmap.json"></script> -->
+
+  <% if (isLocal) { %>
+  <script type="systemjs-importmap">
+    {
+      "imports": {
+        "@single-spa/welcome": "https://unpkg.com/single-spa-welcome/dist/single-spa-welcome.js",
+        "@icici/root-config": "//localhost:9000/icici-root-config.js",
+        "@icici/nliff": "https://cdn.jsdelivr.net/gh/jehuamanna/bank-cdn/nli/init.js",
+        "@icici/flutter": "https://cdn.jsdelivr.net/gh/jehuamanna/bank-cdn/nli/flutter.js",
+        "@icici/Smart-Statement-oneview": "https://cdn.jsdelivr.net/gh/jehuamanna/bank-cdn/smart/init.js"
+      }
+    }
+  </script>
+  <% } %>
+
+  <!--
+    If you need to support Angular applications, uncomment the script tag below to ensure only one instance of ZoneJS is loaded
+    Learn more about why at https://single-spa.js.org/docs/ecosystem-angular/#zonejs
+  -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/zone.js@0.11.3/dist/zone.min.js"></script> -->
+
+  <script src="https://cdn.jsdelivr.net/npm/import-map-overrides@2.2.0/dist/import-map-overrides.js"></script>
+  <% if (isLocal) { %>
+  <script src="https://cdn.jsdelivr.net/npm/systemjs@6.8.3/dist/system.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/systemjs@6.8.3/dist/extras/amd.js"></script>
+  <% } else { %>
+  <script src="https://cdn.jsdelivr.net/npm/systemjs@6.8.3/dist/system.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/systemjs@6.8.3/dist/extras/amd.min.js"></script>
+  <% } %>
+
+</head>
+<body>
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
+  <script>
+    
+    window['appnames'] = {
+        "@icici/nliff": "https://cdn.jsdelivr.net/gh/jehuamanna/bank-cdn/nli/",
+        "@icici/Smart-Statement-oneview": "https://cdn.jsdelivr.net/gh/jehuamanna/bank-cdn/smart/"
+      }
+
+
+      function _load({ entrypointUrl, hostElement, renderer, assetBase }) {
+        try {
+
+          _flutter.loader.loadEntrypoint({
+            entrypointUrl: entrypointUrl + "main.dart.js",
+            onEntrypointLoaded: async function (engineInitializer) {
+              let appRunner = await engineInitializer.initializeEngine({
+                hostElement,
+                renderer,// "html" | "canvaskit",
+                assetBase,
+              });
+              await appRunner.runApp();
+            },
+          });
+        } catch (e) {
+          console.log(e)
+        }
+      }
+      const app = ({ entrypointUrl, hostElement, renderer, assetBase }) => () => ({
+        bootstrap: async function () {
+          console.log("App is bootstrapping", entrypointUrl, hostElement, renderer, assetBase)
+        },
+        mount: async function () {
+          console.log("App is loading")
+
+          _load({ entrypointUrl, hostElement, renderer, assetBase })
+
+        },
+        unmount: async function () {
+          console.log("App is unmouting")
+          const x = hostElement ? hostElement : document.querySelector("flt-glass-pane")
+          x.remove()
+        }
+      })
+
+      window.app = app;
+    System.import('@icici/root-config');
+    System.import('@icici/nliff');
+    System.import("@icici/flutter");  
+    System.import('@icici/Smart-Statement-oneview');
+    window.addEventListener('single-spa:before-first-mount', () => {
+        console.log(
+          'singl e-spa is about to mount the very first application for the first time',
+        );
+        const x = location.pathname
+      console.log(location.pathname, location.href.split("//"))
+      const basepath = x.split("/")[1] || ""
+      console.log(basepath, location.href);
+      document.head.innerHTML = document.head.innerHTML + "<base href='" + "/" + basepath  + "/" +"' />";
+       
+
+
+      });
+  </script>
+  <import-map-overrides-full show-when-local-storage="devtools" dev-libs></import-map-overrides-full>
+</body>
+</html>

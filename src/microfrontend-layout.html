@@ -1,0 +1,48 @@
+<single-spa-router>
+  <!--
+
+    This is the single-spa Layout Definition for your microfrontends.
+    See https://single-spa.js.org/docs/layout-definition/ for more information.
+
+  -->
+
+  <!-- Example layouts you might find helpful:
+
+  <nav>
+    <application name="@org/navbar"></application>
+  </nav>
+  <route path="settings">
+    <application name="@org/settings"></application>
+  </route>
+
+  -->
+
+  <main>
+    <!-- <route default>
+      <application name="@single-spa/welcome"></application>
+    </route> -->
+    <!-- <route  default>
+      <route path="/">
+      </route>
+        <application name="@jehu/dashboard-init"></application>
+    </route> -->
+    <route path="/nliff">
+      <route default>
+        <application name="@icici/nliff"></application>
+
+      </route>
+    </route>
+    <route path="/Smart-Statement-oneview">
+      <route default>
+        <application name="@icici/Smart-Statement-oneview"></application>
+
+      </route>
+    </route>
+    <!-- <route path="/groupthreeserviceone">
+      <route default>
+        <application name="@icici/g3s1-init"></application>
+
+      </route>
+    </route> -->
+  </main>
+</single-spa-router>
