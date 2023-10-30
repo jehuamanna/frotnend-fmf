@@ -3,12 +3,15 @@
   "scripts": {
     "start": "webpack serve --port 3000 --env isLocal",
     "lint": "eslint src --ext js",
+    "homepage": "https://jehuamanna.github.io/react-gh-pages",
     "test": "cross-env BABEL_ENV=test jest --passWithNoTests",
     "format": "prettier --write .",
     "check-format": "prettier --check .",
     "prepare": "husky install",
     "build": "concurrently npm:build:*",
-    "build:webpack": "webpack --mode=production"
+    "build:webpack": "webpack --mode=production",
+    "predeploy": "npm run build",
+  "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
