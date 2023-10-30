@@ -3,7 +3,7 @@
   "scripts": {
     "start": "webpack serve --port 3000 --env isLocal",
     "lint": "eslint src --ext js",
-    "homepage": "https://jehuamanna.github.io/react-gh-pages",
+    "homepage": "https://jehuamanna.github.io/frotnend-fmf",
     "test": "cross-env BABEL_ENV=test jest --passWithNoTests",
     "format": "prettier --write .",
     "check-format": "prettier --check .",
@@ -11,7 +11,7 @@
     "build": "concurrently npm:build:*",
     "build:webpack": "webpack --mode=production",
     "predeploy": "npm run build",
-  "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
@@ -25,6 +25,7 @@
     "eslint-config-important-stuff": "^1.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.1",
+    "gh-pages": "^6.0.0",
     "html-webpack-plugin": "^5.3.2",
     "husky": "^7.0.2",
     "jest": "^27.0.6",
